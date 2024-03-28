@@ -10,6 +10,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/profile',isLoggedIn, function(req, res, next) {
+  res.send('Welcome to profile');
+});
+
+
 // authetication and authorization setup
 router.post('/register',function(req,res,next){
   var userdata = new userModel({
@@ -40,6 +45,7 @@ function isLoggedIn(req,res,next){
   if(req.isAuthenticated()){
     return next();
   }
+  // res.send('<script>alert("You need to be authenticated to access this page")</script>');
   res.redirect('/');
 }
 
