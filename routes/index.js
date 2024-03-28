@@ -41,6 +41,44 @@ router.get('/allusers',async function(req,res,next){
 })
 
 // using regexp to find users using case insensetive capital small letters wont matter
+router.get('/find',async function(req,res,next){
+  var regex = new RegExp('^devraj shrivastava$','i');
+  let user = await userModel.find({username : regex});
+  res.send(user);
+})
+
+// searching on the basis off specific details
+router.get('/find2',async function(req,res,next){
+  let user = await userModel.find({categoreis: {$all: ['JS']}});
+  res.send(user);
+})
+
+// specific date range 
+router.get('/date',async function(req,res,next){
+  var date1 = new Date('2024-03-22');
+  var date2 = new Date('2024-03-26');
+  let userdate = await userModel.find({datecreated: {$gte: date1, $lte: date2}});
+  res.send(userdate);
+})
 
 
-module.exports = router;
+// filter everyone on thr basis of fields matalab bande ke pass vo field h ya ni h
+router.get('/field',async function(req,res,next){
+  let user = await userModel.find({categoreis: {$exists: true}});
+  res.send(user);
+})
+
+// specific field length 
+router.get('/fieldlength',async function(req,res,next){
+  let user = await userModel.find({
+    $expr:{
+      $and: [
+        {$gte: [{$strLenCP: '$nickname'},0]},
+        {$lte: [{$strLenCP: '$nickname'},12]}
+      ]
+    }
+  });
+  res.send(user);
+})
+
+module.exports = router; 
