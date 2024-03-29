@@ -13,7 +13,8 @@ const userSchema = mongoose.Schema({
   datecreated: {
     type: Date,
     default: Date.now()
-  }
+  },
+  password: String
 })
 
 userSchema.plugin(plm);
